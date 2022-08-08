@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
 const userSchema = mongoose.Schema({
   name: {
@@ -14,7 +15,19 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
     minLength: [4, 'Character must be more than 4 character']
+  },
+  avartar: {
+    type: String,
+    default: ''
   }
+})
+
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    const hashedPassword = await bcrypt.hash(this.password, 8)
+    this.password = hashedPassword
+  }
+  next()
 })
 
 module.exports = mongoose.model('User', userSchema)
