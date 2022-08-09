@@ -19,6 +19,11 @@ const userSchema = mongoose.Schema({
   avartar: {
     type: String,
     default: ''
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+    required: true
   }
 })
 
@@ -31,9 +36,9 @@ userSchema.pre('save', async function (next) {
 })
 
 // compare passwords
-userSchema.methods.comparePassword = async function(password){
+userSchema.methods.comparePassword = async function (password) {
   const result = await bcrypt.compareSync(password, this.password)
-  return result;
+  return result
 }
 
 module.exports = mongoose.model('User', userSchema)

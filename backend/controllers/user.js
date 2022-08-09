@@ -1,7 +1,10 @@
 const { findOne } = require('../model/user')
 const User = require('../model/user')
-const { sendError } = require('../utils')
+const { sendError, generateOTP } = require('../utils/helpers')
 const jwt = require('jsonwebtoken')
+const verificationToken = require('../model/verificationToken')
+const { mailTransport, generateEmailTemplate, generateWelcomeEmailTemplate } = require('../utils/mails')
+const { isValidObjectId } = require('mongoose')
 
 exports.createUser = async (req, res) => {
   const { name, email, password } = req.body
@@ -15,7 +18,22 @@ exports.createUser = async (req, res) => {
     password
   })
 
+  const otpNumber = generateOTP()
+
+  const token = new verificationToken({
+    owner: newUser._id,
+    token: otpNumber
+  })
+
+  await token.save()
   await newUser.save()
+
+  mailTransport().sendMail({
+    from: 'authmern@fullstack.com',
+    to: newUser.email,
+    subject: 'Email verification',
+    html: generateEmailTemplate(otpNumber)
+  })
 
   res.send(newUser)
 }
@@ -36,4 +54,38 @@ exports.signInUser = async (req, res) => {
   res
     .status(200)
     .json({ id: user._id, name: user.name, email: user.email, token })
+}
+
+exports.verifyEmail = async (req, res) => {
+  const { userId, otp } = req.body
+  if (!userId || !otp.trim()) return sendError(res, 'Invalid request missing!')
+
+  if (!isValidObjectId(userId)) return sendError(res, ' invalid user id!')
+
+  const user = await User.findById(userId)
+
+  if (!user) return sendError(res, 'User not found')
+
+  if (user.verfied) return sendError(res, 'This account is already verified!')
+
+  const token = await verificationToken.findOne({ owner: user._id })
+
+  if (!token) return sendError(res, 'Sorry user not found!')
+
+  const iseMatched = await token.compareToken(otp)
+  if (!iseMatched) return sendError(res, 'Provide valid token!')
+
+  user.verified = true
+  await verificationToken.findByIdAndDelete(token._id)
+
+  await user.save()
+
+  mailTransport().sendMail({
+    from: 'authmern@fullstack.com',
+    to: user.email,
+    subject: 'Welcome Mail',
+    html: generateWelcomeEmailTemplate(user.name)
+  })
+
+  res.status(200).json({ id: user._id, name: user.name, email: user.email })
 }
