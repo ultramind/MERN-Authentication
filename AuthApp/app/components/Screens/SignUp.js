@@ -11,6 +11,8 @@ const SignUp = () => {
       <AppInput placeholder='example1234@gmail.com' />
       <AppInput placeholder='*********' />
       <AppButton title='SignUp' />
+
+      <FormNavigations leftText='Sign up' rightText='Forgot Password' />
     </FormContainer>
   )
 }

@@ -5,16 +5,15 @@ import AppInput from '../AppInput'
 import AppButton from '../AppButton'
 import FormNavigations from '../FormNavigations'
 
-const Login = () => {
+const ForgotPassword = () => {
   return (
     <FormContainer>
       <AppInput placeholder='example1234@gmail.com' />
-      <AppInput placeholder='*********' />
-      <AppButton title='Login' />
+      <AppButton title='Send Link' />
 
-      <FormNavigations leftText='Sign up' rightText='Forgot Password' />
+      <FormNavigations leftText='Sign up' rightText='Login' />
     </FormContainer>
   )
 }
 
-export default Login
+export default ForgotPassword

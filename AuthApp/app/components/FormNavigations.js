@@ -1,14 +1,19 @@
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, Pressable} from 'react-native'
 import React from 'react'
 
-const FormNavigations = () => {
+const FormNavigations = ({
+  leftText,
+  rightText,
+  leftHandleAction,
+  rightHandleAction,
+}) => {
   return (
     <View style={styles.formLinks}>
-      <Pressable>
-        <Text>Sign Up</Text>
+      <Pressable onPress={leftHandleAction}>
+        <Text>{leftText}</Text>
       </Pressable>
-      <Pressable>
-        <Text>Forgot Password</Text>
+      <Pressable onPress={rightHandleAction}>
+        <Text>{rightText}</Text>
       </Pressable>
     </View>
   )
