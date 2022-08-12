@@ -6,7 +6,7 @@ import FormContainer from './app/components/FormContainer'
 import ForgotPassword from './app/components/Screens/ForgotPassword'
 import Login from './app/components/Screens/Login'
 import SignUp from './app/components/Screens/SignUp'
-import {NavigationContainer} from '@react-navigation/native'
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native'
 import AuthNavigator from './app/navigations/AuthNavigator'
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
@@ -14,8 +14,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 const Stack = createNativeStackNavigator()
 
 const App = () => {
+  const theme = {
+    ...DefaultTheme,
+    colors: {...DefaultTheme.colors, background: '#fff'},
+  }
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme}>
       <AuthNavigator />
     </NavigationContainer>
   )

@@ -1,10 +1,15 @@
 import {View, Text, StyleSheet, Dimensions, Pressable} from 'react-native'
 import React from 'react'
+import {useFormikContext} from 'formik'
+import {text} from 'express'
 
-const AppButton = ({title, handleSubmit}) => {
+const AppButton = ({title}) => {
+  const {handleSubmit, isSubmitting} = useFormikContext()
   return (
     <Pressable style={styles.btn} onPress={handleSubmit}>
-      <Text style={styles.btnText}>{title}</Text>
+      <Text style={styles.btnText}>
+        {isSubmitting ? 'Submiting...' : title}
+      </Text>
     </Pressable>
   )
 }

@@ -5,6 +5,7 @@ import AppInput from '../AppInput'
 import AppButton from '../AppButton'
 import FormNavigations from '../FormNavigations'
 import {useNavigation} from '@react-navigation/native'
+import CustomFormik from '../CustomFormik'
 
 import {Formik} from 'formik'
 import * as yup from 'yup'
@@ -48,62 +49,33 @@ const SignUp = () => {
   }
 
   const handleSignup = (values, formikActions) => {
-    console.log('====================================')
-    console.log(values)
-    console.log('====================================')
+    setTimeout(() => {
+      console.log('====================================')
+      console.log(values, formikActions)
+      console.log('====================================')
+      formikActions.resetForm()
+      formikActions.setSubmitting(false)
+    }, 3000)
   }
   return (
     <FormContainer>
-      <Formik
+      <CustomFormik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSignup}
       >
-        {({
-          errors,
-          values,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-        }) => {
-          console.log('====================================')
-          console.log(errors, values)
-          console.log('====================================')
-          return (
-            <>
-              <Text>{touched.name && errors.name ? errors.name : ''}</Text>
-              <AppInput
-                onChangeText={handleChange('name')}
-                placeholder='Firstname Lastname'
-                onBlur={handleBlur('name')}
-              />
-              <Text>{touched.email && errors.email ? errors.email : ''}</Text>
-              <AppInput
-                onChangeText={handleChange('email')}
-                placeholder='example1234@gmail.com'
-                onBlur={handleBlur('email')}
-              />
-              <Text>
-                {touched.password && errors.password ? errors.password : ''}
-              </Text>
-              <AppInput
-                onChangeText={handleChange('password')}
-                placeholder='*********'
-                onBlur={handleBlur('password')}
-              />
-              <AppButton onSubmit={handleSubmit} title='SignUp' />
+        <AppInput name='name' placeholder='Firstname Lastname' />
+        <AppInput name='email' placeholder='example1234@gmail.com' />
+        <AppInput secureTextEntry name='password' placeholder='*********' />
+        <AppButton title='SignUp' />
 
-              <FormNavigations
-                leftText='Login'
-                leftHandleAction={navigateToLogin}
-                rightText='Forgot Password'
-                rightHandleAction={navigateToForgotPassword}
-              />
-            </>
-          )
-        }}
-      </Formik>
+        <FormNavigations
+          leftText='Login'
+          leftHandleAction={navigateToLogin}
+          rightText='Forgot Password'
+          rightHandleAction={navigateToForgotPassword}
+        />
+      </CustomFormik>
     </FormContainer>
   )
 }
