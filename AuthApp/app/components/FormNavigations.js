@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   formLinks: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 15,
+    marginTop: 20,
   },
 })
 

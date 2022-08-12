@@ -1,9 +1,9 @@
 import {View, Text, StyleSheet, Dimensions, Pressable} from 'react-native'
 import React from 'react'
 
-const AppButton = ({title, onPress}) => {
+const AppButton = ({title, handleSubmit}) => {
   return (
-    <Pressable style={styles.btn} onPress={onPress}>
+    <Pressable style={styles.btn} onPress={handleSubmit}>
       <Text style={styles.btnText}>{title}</Text>
     </Pressable>
   )
